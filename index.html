@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Turn a vague NIFTY trading question into a clear, honest example test.">
+  <title>After the Fall · Research Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main class="page">
+    <header class="site-header">
+      <div class="brand">AFTER<span>THE</span>FALL</div>
+      <span class="data-tag">SIMULATED DATA</span>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">A trading idea, tested carefully</p>
+      <h1 id="page-title">What happens <em>after a sharp fall?</em></h1>
+      <p>Before testing a trading idea, we need to say exactly what it means. This small prototype turns one vague question into a rule, runs an example, and explains what the example can tell us.</p>
+      <nav class="steps" aria-label="Research journey">
+        <span>1 Ask</span><span>2 Clarify</span><span>3 Define</span><span>4 Test</span><span>5 Learn</span>
+      </nav>
+    </section>
+
+    <div class="columns">
+      <section class="card" aria-labelledby="clarify-title">
+        <p class="section-label">01 · Ask</p>
+        <span class="field-title">The example question</span>
+        <blockquote class="question-card">“Does buying NIFTY after a sharp fall work?”</blockquote>
+        <p class="help">This prototype investigates this one question. Select it to see which details need clarification.</p>
+        <button id="ask" class="secondary-button" type="button" aria-controls="clarification definition" aria-expanded="false">Ask this question</button>
+        <p id="asked-status" class="asked-status" hidden>Question selected. Now review the suggested assumptions below.</p>
+
+        <div id="clarification" hidden>
+        <hr>
+        <p class="section-label">02 · Clarify</p>
+        <h2 id="clarify-title">Fill in what is missing</h2>
+        <p class="muted">The user did not define “sharp,” choose a product, or say when to sell. The values below are <strong>suggested assumptions</strong> for a first test.</p>
+
+        <div class="field">
+          <label class="field-title" for="threshold">How large is a “sharp fall”?</label>
+          <p class="help">Compare NIFTY 50's closing value with its previous closing value.</p>
+          <div class="number-input"><input id="threshold" type="number" min="0.5" max="10" step="0.5" value="2"><span>% or more in one day</span></div>
+        </div>
+
+        <div class="field">
+          <span class="field-title">What would the person buy?</span>
+          <p class="fixed-choice">A NIFTY 50 ETF <span>Chosen for this demo</span></p>
+          <p class="help">NIFTY 50 is an index, not a product you can buy directly. An index mutual fund is another possibility, but it needs different pricing rules and is outside this demo.</p>
+        </div>
+
+        <div class="field">
+          <span class="field-title">When would they buy?</span>
+          <p class="fixed-choice">Next session's opening price</p>
+          <p class="help">We can only know the full-day fall after that day ends.</p>
+        </div>
+
+        <div class="field">
+          <label class="field-title" for="hold">When would they sell?</label>
+          <p class="help">Sell at the closing price this many sessions after buying.</p>
+          <div class="number-input"><input id="hold" type="number" min="1" max="20" step="1" value="5"><span>sessions later</span></div>
+        </div>
+
+        <div class="field">
+          <label class="field-title" for="cost">Estimated buying and selling costs</label>
+          <p class="help">An illustrative total cost, deducted from each trade's return.</p>
+          <div class="number-input"><input id="cost" type="number" min="0" max="5" step="0.05" value="0.2"><span>% of invested amount</span></div>
+        </div>
+
+        <p id="input-error" class="error" role="alert" hidden>Use a fall from 0.5% to 10%, a whole-number holding period from 1 to 20 sessions, and costs from 0% to 5%.</p>
+        <button id="run" class="primary-button" type="button">Use these assumptions and run the example</button>
+        </div>
+      </section>
+
+      <aside id="definition" class="card definition" aria-labelledby="define-title" hidden>
+        <p class="section-label">03 · Define</p>
+        <h2 id="define-title">The exact experiment</h2>
+        <p class="muted">These rules are visible before the test runs. Change the numbers on the left to see the rule change.</p>
+        <dl class="rule-list">
+          <div><dt>Market signal</dt><dd id="rule-signal"></dd></div>
+          <div><dt>Product bought</dt><dd>NIFTY 50 ETF (simulated)</dd></div>
+          <div><dt>Buy</dt><dd>Next simulated session, at open</dd></div>
+          <div><dt>Sell</dt><dd id="rule-sell"></dd></div>
+          <div><dt>Costs</dt><dd id="rule-cost"></dd></div>
+          <div><dt>Sample</dt><dd>360 simulated sessions, Day 1–360</dd></div>
+          <div><dt>Overlapping signals</dt><dd>Skip a new fall while an earlier trade is still open</dd></div>
+          <div><dt>Hypothesis</dt><dd id="rule-hypothesis"></dd></div>
+        </dl>
+        <div class="callout"><strong>What does “work” mean here?</strong><p>We will show how many trades gained money after costs and the average gain or loss per trade. We will also compare that average with ordinary holding periods of the same length in this invented sample.</p></div>
+        <div class="callout caution"><strong>Important limit</strong><p>The prices and day numbers are invented. They do not represent real NIFTY or ETF history and cannot prove a real-world strategy works.</p></div>
+      </aside>
+    </div>
+
+    <section id="results" class="card results" aria-labelledby="results-title" hidden>
+      <div class="results-top"><div><p class="section-label">04 · Test / 05 · Learn</p><h2 id="results-title">What this example found</h2></div><span class="data-tag">SIMULATED · NOT REAL MARKET EVIDENCE</span></div>
+      <p id="tested-rule" class="muted"></p>
+      <div class="metrics">
+        <div class="metric"><strong id="trade-count"></strong><span>trades triggered</span></div>
+        <div class="metric"><strong id="wins"></strong><span>profitable after costs</span></div>
+        <div class="metric"><strong id="average"></strong><span>average return per trade</span></div>
+        <div class="metric"><strong id="baseline"></strong><span>average ordinary holding period</span></div>
+      </div>
+      <p class="help comparison-help">“Ordinary holding period” means buying on any possible simulated session and selling after the same number of sessions, using the same cost. It is context, not a guarantee or proof that one rule is better.</p>
+      <div class="learning">
+        <div><h3>What the sample shows</h3><p id="observation"></p></div>
+        <div><h3>What we can conclude</h3><p id="conclusion"></p></div>
+        <div><h3>What to check next</h3><p>Try other fall sizes and holding periods. Then repeat the experiment with sourced NIFTY 50 and ETF prices, real trading dates, and more accurate costs.</p></div>
+      </div>
+      <div id="trade-detail" class="trade-detail" hidden>
+        <h3>How one trade is calculated</h3>
+        <p id="trade-example"></p>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <caption>Every qualifying example trade. Day numbers are invented sessions, not calendar dates.</caption>
+          <thead><tr><th>Fall noticed</th><th>NIFTY fall</th><th>ETF bought</th><th>ETF buy price</th><th>ETF sold</th><th>ETF sell price</th><th>Return after costs</th></tr></thead>
+          <tbody id="trade-rows"></tbody>
+        </table>
+      </div>
+    </section>
+    <footer>Educational prototype using reproducible simulated prices. It is not investment advice or a real-market backtest.</footer>
+  </main>
+</body>
+</html>
