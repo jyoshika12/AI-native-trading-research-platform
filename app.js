@@ -1,7 +1,5 @@
 "use strict";
 
-// These numbers are invented and repeatable. Each session has a small chance
-// of a larger fall; the seed makes the irregular sequence the same on each run.
 function generateSample() {
   let seed = 20260913;
   const random = () => ((seed = (1664525 * seed + 1013904223) >>> 0) / 4294967296);
@@ -34,8 +32,6 @@ function runBacktest(sessions, fallThreshold, holdSessions, costPercent) {
     const sellIndex = buyIndex + holdSessions;
     const buyPrice = sessions[buyIndex].etfOpen;
     const sellPrice = sessions[sellIndex].etfClose;
-    // Cost is modeled as a percentage of the starting amount, so subtracting
-    // cost percentage points from gross percentage return is appropriate here.
     const grossPercent = (sellPrice / buyPrice - 1) * 100;
     const netPercent = grossPercent - costPercent;
 
@@ -49,15 +45,13 @@ function runBacktest(sessions, fallThreshold, holdSessions, costPercent) {
       grossPercent,
       netPercent
     });
-    lastExitIndex = sellIndex; // Skip new signals until this trade is closed.
+    lastExitIndex = sellIndex; 
   }
 
   const wins = trades.filter(trade => trade.netPercent > 0).length;
   const average = trades.length
     ? trades.reduce((sum, trade) => sum + trade.netPercent, 0) / trades.length
     : null;
-
-  // Descriptive comparison: every possible entry day with the same hold/cost.
   const ordinaryReturns = [];
   for (let buyIndex = 1; buyIndex + holdSessions < sessions.length; buyIndex++) {
     const buyPrice = sessions[buyIndex].etfOpen;
@@ -184,7 +178,7 @@ if (typeof document !== "undefined") {
 
   for (const input of [threshold, hold, cost]) {
     input.addEventListener("input", () => {
-      results.hidden = true; // Prevent old results appearing beside new rules.
+      results.hidden = true; 
       updateDefinition();
     });
   }
